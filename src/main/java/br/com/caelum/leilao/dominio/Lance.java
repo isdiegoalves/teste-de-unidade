@@ -1,11 +1,13 @@
 package br.com.caelum.leilao.dominio;
 
+import javax.money.MonetaryAmount;
+
 public class Lance {
 
 	private Usuario usuario;
-	private double valor;
+	private MonetaryAmount valor;
 	
-	public Lance(Usuario usuario, double valor) {
+	public Lance(Usuario usuario, MonetaryAmount valor) {
 		this.usuario = usuario;
 		this.valor = valor;
 	}
@@ -14,7 +16,7 @@ public class Lance {
 		return usuario;
 	}
 
-	public double getValor() {
+	public MonetaryAmount getValor() {
 		return valor;
 	}
 	
