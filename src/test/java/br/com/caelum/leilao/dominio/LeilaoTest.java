@@ -1,5 +1,7 @@
 package br.com.caelum.leilao.dominio;
 
+import static org.junit.Assert.assertEquals;
+
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 
@@ -12,46 +14,41 @@ public class LeilaoTest {
 
 	private Usuario isabela;
 	private Usuario diego;
+	private CurrencyUnit real;
+	private Leilao leilao;
 
 	@Before
 	public void before() {
 		diego = new Usuario("Diego");
 		isabela = new Usuario("Isabela");
+		real = Monetary.getCurrency("BRL");
+		leilao = new Leilao("Playstation", real);
 	}
 
 	@Test
 	public void deveReceberApenasUmLance() {
-		CurrencyUnit real = Monetary.getCurrency("BRL");
-
-		Leilao leilao = new Leilao("Playstation", real);
-		Assert.assertEquals(0, leilao.getLances().size());
-
+		assertEquals(0, leilao.getLances().size());
+		
 		leilao.propoe(new Lance(diego, Money.of(250, real)));
-		Assert.assertEquals(1, leilao.getLances().size());
 
-		Assert.assertEquals(Money.of(250, real), leilao.getLances().get(0).getValor());
+		assertEquals(1, leilao.getLances().size());
+		assertEquals(Money.of(250, real), leilao.getLances().get(0).getValor());
 	}
 
 	@Test
 	public void deveReceberVariosLances() {
-		CurrencyUnit real = Monetary.getCurrency("BRL");
-
-		Leilao leilao = new Leilao("Playstation", real);
 		Assert.assertEquals(0, leilao.getLances().size());
 
 		leilao.propoe(new Lance(diego, Money.of(250, real)));
 		leilao.propoe(new Lance(isabela, Money.of(450, real)));
 
-		Assert.assertEquals(2, leilao.getLances().size());
+		assertEquals(2, leilao.getLances().size());
 		Assert.assertEquals(Money.of(250, real), leilao.getLances().get(0).getValor());
 		Assert.assertEquals(Money.of(450, real), leilao.getLances().get(1).getValor());
 	}
 
 	@Test
 	public void naoDeveAceitarDoisLancesSeguidosDoMesmosUsuario() {
-		CurrencyUnit real = Monetary.getCurrency("BRL");
-
-		Leilao leilao = new Leilao("Playstation", real);
 		Assert.assertEquals(0, leilao.getLances().size());
 
 		leilao.propoe(new Lance(diego, Money.of(250, real)));
@@ -63,9 +60,6 @@ public class LeilaoTest {
 
 	@Test
 	public void naoDeveReceberMaisDoQueCincoLancesDoMesmosUsuario() {
-		CurrencyUnit real = Monetary.getCurrency("BRL");
-
-		Leilao leilao = new Leilao("Playstation", real);
 		Assert.assertEquals(0, leilao.getLances().size());
 
 		leilao.propoe(new Lance(diego, Money.of(250, real)));
@@ -94,9 +88,6 @@ public class LeilaoTest {
 
 	@Test
 	public void deveReceberApostaDobradaUltimoLance() {
-		CurrencyUnit real = Monetary.getCurrency("BRL");
-
-		Leilao leilao = new Leilao("Playstation", real);
 		Assert.assertEquals(0, leilao.getLances().size());
 
 		leilao.propoe(new Lance(diego, Money.of(250, real)));
@@ -118,9 +109,6 @@ public class LeilaoTest {
 	
 	@Test
 	public void naoDeveReceberApostaDobradaSemLance() {
-		CurrencyUnit real = Monetary.getCurrency("BRL");
-
-		Leilao leilao = new Leilao("Playstation", real);
 		Assert.assertEquals(0, leilao.getLances().size());
 
 		leilao.dobrarLance(diego);
@@ -130,9 +118,6 @@ public class LeilaoTest {
 	
 	@Test
 	public void naoDeveReceberApostaDobradaNoSextoLanceDoMesmosUsuario() {
-		CurrencyUnit real = Monetary.getCurrency("BRL");
-
-		Leilao leilao = new Leilao("Playstation", real);
 		Assert.assertEquals(0, leilao.getLances().size());
 
 		leilao.propoe(new Lance(diego, Money.of(250, real)));
@@ -160,9 +145,6 @@ public class LeilaoTest {
 	
 	@Test
 	public void naoDeveReceberApostaDobradaNoSextoLanceDobradoDoMesmosUsuario() {
-		CurrencyUnit real = Monetary.getCurrency("BRL");
-
-		Leilao leilao = new Leilao("Playstation", real);
 		Assert.assertEquals(0, leilao.getLances().size());
 
 		leilao.propoe(new Lance(diego, Money.of(250, real)));
@@ -179,6 +161,7 @@ public class LeilaoTest {
 
 		leilao.dobrarLance(diego);
 
+		//deve ignorar o sexto lance
 		leilao.dobrarLance(diego);
 
 		Assert.assertEquals(9, leilao.getLances().size());

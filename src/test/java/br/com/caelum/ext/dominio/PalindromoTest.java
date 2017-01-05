@@ -1,9 +1,9 @@
 package br.com.caelum.ext.dominio;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import br.com.caelum.ext.dominio.Palindromo;
+import org.junit.Test;
 
 public class PalindromoTest {
 
@@ -11,9 +11,8 @@ public class PalindromoTest {
     public void identicarPalindromoERemoverCaracteresInvalidos() {
         Palindromo palindromo = new Palindromo();
         
-        Assert.assertTrue(palindromo.ehPalindromo("Anotaram a data da maratona"));
-        
-        Assert.assertTrue(palindromo.ehPalindromo("Socorram-me subi no onibus em Marrocos"));
+        assertTrue(palindromo.ehPalindromo("Anotaram a data da maratona"));
+        assertTrue(palindromo.ehPalindromo("Socorram-me subi no onibus em Marrocos"));
     }
 	
 	@Test
@@ -22,6 +21,6 @@ public class PalindromoTest {
         
         String frase = "Diego eh um cara bem legal";
         
-        Assert.assertFalse(palindromo.ehPalindromo(frase));
+        assertFalse(palindromo.ehPalindromo(frase));
     }
 }

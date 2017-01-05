@@ -1,28 +1,32 @@
 package br.com.caelum.ext.dominio;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Before;
 import org.junit.Test;
 
 public class AnoBissextoTest {
 
+	private AnoBissexto ano;
+	
+	@Before
+	public void before() {
+		ano = new AnoBissexto();
+	}
+
 	@Test
 	public void deveSerAnoBissexto() {
-		
-		AnoBissexto ano = new AnoBissexto();
-		
-		Assert.assertTrue(ano.ehBissexto(2004));
-		Assert.assertTrue(ano.ehBissexto(2008));
-		Assert.assertTrue(ano.ehBissexto(2012));
-		Assert.assertTrue(ano.ehBissexto(2016));
-		Assert.assertTrue(ano.ehBissexto(2100));
-		Assert.assertTrue(ano.ehBissexto(400));
+		assertTrue(ano.ehBissexto(2004));
+		assertTrue(ano.ehBissexto(2008));
+		assertTrue(ano.ehBissexto(2012));
+		assertTrue(ano.ehBissexto(2016));
+		assertTrue(ano.ehBissexto(2100));
+		assertTrue(ano.ehBissexto(400));
 	}
 	
 	@Test
 	public void naoDeveSerAnoBissexto() {
-		
-		AnoBissexto ano = new AnoBissexto();
-		
-		Assert.assertFalse(ano.ehBissexto(2017));
+		assertFalse(ano.ehBissexto(2017));
 	}
 }
