@@ -14,9 +14,13 @@ import org.javamoney.moneta.function.MonetarySummaryStatistics;
 public class Avaliador {
 
 	private MonetarySummaryStatistics leilaoSumarizado;
-	private List<MonetaryAmount> maioresValores = Collections.emptyList();
+	private List<Lance> maioresLances = Collections.emptyList();
 	
 	public void avalia(Leilao leilao) {
+		
+		if (leilao.getLances().isEmpty()) {
+			throw new UnsupportedOperationException("Não é possível avaliar um leilão sem lances!");
+		}
 		
 		leilaoSumarizado = leilao.getLances().stream()
 				.map(lance -> lance.getValor())
@@ -24,11 +28,9 @@ public class Avaliador {
 				.collect(MonetaryFunctions.groupBySummarizingMonetary()).get()
 				.get(leilao.getMoeda());
 
-		maioresValores = leilao.getLances().stream()
-				.map(lance -> lance.getValor())
+		maioresLances = leilao.getLances().stream()
 				.filter(Objects::nonNull)
-				.distinct()
-				.sorted((s1, s2) -> s2.compareTo(s1))
+				.sorted((s1, s2) -> s2.getValor().compareTo(s1.getValor()))
 				.limit(3)
 				.collect(Collectors.toList());
 	}
@@ -46,7 +48,7 @@ public class Avaliador {
 				.with(MonetaryOperators.rounding(2));
 	}
 	
-	public List<MonetaryAmount> getMaioresValores() {
-		return maioresValores;
+	public List<Lance> getMaioresLances() {
+		return maioresLances;
 	}
 }

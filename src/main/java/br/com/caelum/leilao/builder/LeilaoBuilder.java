@@ -1,9 +1,10 @@
 
 package br.com.caelum.leilao.builder;
 
-import javax.money.CurrencyUnit;
+import static java.util.Objects.requireNonNull;
 
-import org.javamoney.moneta.Money;
+import javax.money.CurrencyUnit;
+import javax.money.MonetaryAmount;
 
 import br.com.caelum.leilao.dominio.Lance;
 import br.com.caelum.leilao.dominio.Leilao;
@@ -18,16 +19,22 @@ public class LeilaoBuilder {
 	}
 
 	public static LeilaoBuilder of(String descricao, CurrencyUnit moeda) {
+		requireNonNull(descricao, "usuario nao pode ser nulo!");
+		requireNonNull(moeda, "valor nao pode ser nulo!");
 		return new LeilaoBuilder(descricao, moeda);
 	}
 
-	public LeilaoBuilder lance(Usuario usuario, Number valor) {
-		leilao.propoe(new Lance(usuario,  Money.of(valor, leilao.getMoeda())));
+	public LeilaoBuilder lance(Usuario usuario, MonetaryAmount valor) {
+		leilao.propoe(Lance.lance(usuario,  valor));
+		return this;
+	}
+
+	public LeilaoBuilder dobrarLance(Usuario usuario) {
+		leilao.dobrarLance(usuario);
 		return this;
 	}
 
 	public Leilao create() {
 		return leilao;
 	}
-
 }
