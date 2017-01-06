@@ -2,6 +2,7 @@ package br.com.caelum.leilao.dominio;
 
 import static br.com.caelum.ext.hamcrest.LeilaoMatcher.temUmLance;
 import static br.com.caelum.leilao.dominio.Lance.lance;
+import static br.com.caelum.leilao.dominio.Usuario.usuario;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.hasItems;
@@ -27,8 +28,8 @@ public class LeilaoTest {
 
 	@Before
 	public void setUp() {
-		diego = new Usuario("Diego");
-		isabela = new Usuario("Isabela");
+		diego =   usuario("Diego");
+		isabela = usuario("Isabela");
 		real = Monetary.getCurrency("BRL");
 	}
 

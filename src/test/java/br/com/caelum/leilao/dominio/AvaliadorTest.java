@@ -1,6 +1,7 @@
 package br.com.caelum.leilao.dominio;
 
 import static br.com.caelum.leilao.dominio.Lance.lance;
+import static br.com.caelum.leilao.dominio.Usuario.usuario;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
@@ -28,9 +29,9 @@ public class AvaliadorTest {
 	@Before
 	public void setUp() {
 		leiloeiro = new Avaliador();
-		jose  = new Usuario("jose");
-		joao  = new Usuario("joao");
-		maria = new Usuario("maria");
+		jose  = usuario("jose");
+		joao  = usuario("joao");
+		maria = usuario("maria");
 		real = Monetary.getCurrency("BRL");
 	}
 
