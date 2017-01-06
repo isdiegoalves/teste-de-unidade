@@ -1,6 +1,7 @@
 package br.com.caelum.leilao.dominio;
 
 import static br.com.caelum.leilao.dominio.Lance.lance;
+import static br.com.caelum.leilao.dominio.Usuario.usuario;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -18,7 +19,7 @@ public class LanceTest {
 	
 	@Before
 	public void setUp() {
-		joao  = new Usuario("joao");
+		joao  = usuario("joao");
 		real = Monetary.getCurrency("BRL");
 	}
 	

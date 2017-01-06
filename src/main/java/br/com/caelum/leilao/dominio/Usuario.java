@@ -5,15 +5,24 @@ public class Usuario {
 	private int id;
 	private String nome;
 	
-	public Usuario(String nome) {
-		this(0, nome);
-	}
-
-	public Usuario(int id, String nome) {
+	private Usuario(int id, String nome) {
 		this.id = id;
 		this.nome = nome;
 	}
-
+	
+	public static Usuario usuario(String nome) {
+		if (nome == null)
+			throw new NullPointerException("nome não pode ser nulo!");
+		
+		if (nome.trim().length() == 0)
+			throw new IllegalArgumentException("nome não pode em branco!");
+		
+		if (nome.matches("^[ 0-9-].*"))
+			throw new IllegalArgumentException("nome não pode iniciar com caracteres invalidos!");
+		
+		return new Usuario(0, nome);
+	}
+	
 	public int getId() {
 		return id;
 	}
