@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 
 import javax.money.MonetaryAmount;
 
+import org.javamoney.moneta.Money;
+
 public class Lance {
 
 	private Usuario usuario;
@@ -12,6 +14,11 @@ public class Lance {
 	public static Lance lance(Usuario usuario, MonetaryAmount valor) {
 		requireNonNull(usuario, "usuario nao pode ser nulo!");
 		requireNonNull(valor, "valor nao pode ser nulo!");
+		
+		if (valor.isLessThanOrEqualTo(Money.of(0, valor.getCurrency()))) {
+			throw new IllegalArgumentException("valor nao pode ser menor ou igual a zero!");
+		}
+
 		return new Lance(usuario, valor);
 	}
 	

@@ -1,5 +1,6 @@
 package br.com.caelum.leilao.dominio;
 
+import static br.com.caelum.ext.hamcrest.LeilaoMatcher.temUmLance;
 import static br.com.caelum.leilao.dominio.Lance.lance;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
@@ -187,5 +188,16 @@ public class LeilaoTest {
 		Leilao leilao = LeilaoBuilder.of("Playstation 3", null)
 				.lance(null,  Money.of(1000, real))
 				.create();
+	}
+	
+	@Test
+	public void deveReceberUmLance() {
+		Leilao leilao = LeilaoBuilder.of("Macbook Pro 15", real).create();
+
+		Lance lance = lance(diego, Money.of(2000, real));
+		leilao.propoe(lance);
+
+		assertThat(leilao.getLances().size(), equalTo(1));
+		assertThat(leilao, temUmLance(lance));
 	}
 }

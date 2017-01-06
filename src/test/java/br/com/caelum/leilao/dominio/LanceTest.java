@@ -31,12 +31,17 @@ public class LanceTest {
 	}
 	
 	@Test(expected=NullPointerException.class)
-	public void naoPermiteLanceSemValor() {
+	public void naoDevePermitirLanceSemValor() {
 		lance(joao,  null);
 	}
 	
 	@Test(expected=NullPointerException.class)
-	public void naoPermiteLanceSemUsuario() {
+	public void naoDevePermitirLanceSemUsuario() {
 		lance(null,  Money.of(1000, real));
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void naoDevePermitirLanceSemLanceComValorNegativoOuZero() {
+		lance(joao,  Money.of(-1000, real));
 	}
 }
