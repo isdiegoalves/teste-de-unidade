@@ -11,6 +11,10 @@ public class Usuario {
 	}
 	
 	public static Usuario usuario(String nome) {
+		return usuario(0, nome);
+	}
+	
+	public static Usuario usuario(int id, String nome) {
 		if (nome == null)
 			throw new NullPointerException("nome não pode ser nulo!");
 		
@@ -20,7 +24,7 @@ public class Usuario {
 		if (nome.matches("^[ 0-9-].*"))
 			throw new IllegalArgumentException("nome não pode iniciar com caracteres invalidos!");
 		
-		return new Usuario(0, nome);
+		return new Usuario(id, nome);
 	}
 	
 	public int getId() {
@@ -58,7 +62,5 @@ public class Usuario {
 			return false;
 		return true;
 	}
-	
-	
 	
 }

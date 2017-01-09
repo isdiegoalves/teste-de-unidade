@@ -1,5 +1,7 @@
 package br.com.caelum.leilao.dominio;
 
+import static org.javamoney.moneta.function.MonetaryOperators.rounding;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -8,7 +10,6 @@ import java.util.stream.Collectors;
 import javax.money.MonetaryAmount;
 
 import org.javamoney.moneta.function.MonetaryFunctions;
-import org.javamoney.moneta.function.MonetaryOperators;
 import org.javamoney.moneta.function.MonetarySummaryStatistics;
 
 public class Avaliador {
@@ -44,8 +45,7 @@ public class Avaliador {
 	}
 
 	public MonetaryAmount getMediaLances() {
-		return leilaoSumarizado.getAverage()
-				.with(MonetaryOperators.rounding(2));
+		return leilaoSumarizado.getAverage().with(rounding(2));
 	}
 	
 	public List<Lance> getMaioresLances() {

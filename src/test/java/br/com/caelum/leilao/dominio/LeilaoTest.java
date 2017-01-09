@@ -8,6 +8,8 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
 
 import java.util.List;
 
@@ -18,7 +20,7 @@ import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.leilao.builder.LeilaoBuilder;
+import br.com.caelum.leilao.builder.CriadorDeLeilao;
 
 public class LeilaoTest {
 
@@ -35,22 +37,22 @@ public class LeilaoTest {
 
 	@Test
 	public void deveAceitarApenasUmLance() {
-		Leilao leilao = LeilaoBuilder.of("Playstation", real)
+		Leilao leilao = CriadorDeLeilao.para("Playstation", real)
 			.lance(diego, Money.of(250, real))
 			.create();
 		
-		assertThat(leilao.getLances().size(), equalTo(1));
+		assertThat(leilao.getLances(), hasSize(1));
 		assertThat(leilao.getLances(), hasItem(lance(diego, Money.of(250, real))));
 	}
 
 	@Test
 	public void deveAceitarDoisLances() {
-		Leilao leilao = LeilaoBuilder.of("Playstation", real)
+		Leilao leilao = CriadorDeLeilao.para("Playstation", real)
 			.lance(diego,   Money.of(250, real))
 			.lance(isabela, Money.of(450, real))
 			.create();
 
-		assertThat(leilao.getLances().size(), equalTo(2));
+		assertThat(leilao.getLances(), hasSize(2));
 		assertThat(leilao.getLances(), hasItems(
 				lance(diego,   Money.of(250, real)),
 				lance(isabela, Money.of(450, real))));
@@ -58,18 +60,18 @@ public class LeilaoTest {
 
 	@Test
 	public void naoDeveAceitarDoisLancesSeguidosDoMesmosUsuario() {
-		Leilao leilao = LeilaoBuilder.of("Playstation", real)
+		Leilao leilao = CriadorDeLeilao.para("Playstation", real)
 				.lance(diego, Money.of(250, real))
 				.lance(diego, Money.of(300, real))
 				.create();
 
-		assertThat(leilao.getLances().size(), is(1));
+		assertThat(leilao.getLances(), hasSize(1));
 		assertThat(leilao.getLances(), hasItem(lance(diego, Money.of(250, real))));
 	}
 
 	@Test
 	public void naoDeveAceitarMaisDoQueCincoLancesDoMesmosUsuario() {
-		Leilao leilao = LeilaoBuilder.of("Playstation", real)
+		Leilao leilao = CriadorDeLeilao.para("Playstation", real)
 			.lance(diego,   Money.of(250, real))//1
 			.lance(isabela, Money.of(300, real))
 			.lance(diego,   Money.of(350, real))//2
@@ -83,14 +85,14 @@ public class LeilaoTest {
 			.lance(diego,   Money.of(750, real))//6, nao deve aceita esse lance
 			.create();
 
-		assertThat(leilao.getLances().size(), equalTo(10));
+		assertThat(leilao.getLances(), hasSize(10));
 		int ultimo = leilao.getLances().size()-1;
 		assertThat(leilao.getLances().get(ultimo), equalTo(lance(isabela, Money.of(700, real))));
 	}
 
 	@Test
 	public void deveAceitarApostaDobradaUltimoLance() {
-		Leilao leilao = LeilaoBuilder.of("Playstation", real)
+		Leilao leilao = CriadorDeLeilao.para("Playstation", real)
 				.lance(diego,   Money.of(250, real))//1
 				.lance(isabela, Money.of(300, real))
 				.lance(diego,   Money.of(350, real))//2
@@ -102,7 +104,7 @@ public class LeilaoTest {
 				.dobrarLance(diego)//5
 				.create();
 
-		assertThat(leilao.getLances().size(), equalTo(9));
+		assertThat(leilao.getLances(), hasSize(9));
 		int ultimo = leilao.getLances().size()-1;
 		assertThat(leilao.getLances().get(ultimo), equalTo(lance(diego, Money.of(1800, real))));
 		//assertThat(leilao.getLances().get(ultimo), equalTo(lance(diego, Money.of(4000, real))));
@@ -110,16 +112,16 @@ public class LeilaoTest {
 	
 	@Test
 	public void naoDeveAceitarApostaDobradaSemExistirLance() {
-		Leilao leilao = LeilaoBuilder.of("Playstation", real)
+		Leilao leilao = CriadorDeLeilao.para("Playstation", real)
 				.dobrarLance(diego)
 				.create();
 
-		assertThat(leilao.getLances().size(), equalTo(0));
+		assertThat(leilao.getLances(), is(empty()));
 	}
 	
 	@Test
 	public void naoDeveAceitarApostaDobradaNoSextoLanceDoMesmosUsuario() {
-		Leilao leilao = LeilaoBuilder.of("Playstation", real)
+		Leilao leilao = CriadorDeLeilao.para("Playstation", real)
 				.lance(diego,   Money.of(250, real))//1
 				.lance(isabela, Money.of(300, real))
 				.lance(diego,   Money.of(350, real))//2
@@ -133,14 +135,14 @@ public class LeilaoTest {
 				.dobrarLance(diego)//6, nao deve aceitar o sexto lance
 				.create();
 
-		assertThat(leilao.getLances().size(), equalTo(10));
+		assertThat(leilao.getLances(), hasSize(10));
 		int ultimo = leilao.getLances().size()-1;
 		assertThat(leilao.getLances().get(ultimo), equalTo(lance(isabela,Money.of(800, real))));
 	}
 	
 	@Test
 	public void naoDeveAceitarApostaDobradaNoSextoLanceDobradoDoMesmosUsuario() {
-		Leilao leilao = LeilaoBuilder.of("Playstation", real)
+		Leilao leilao = CriadorDeLeilao.para("Playstation", real)
 				.lance(diego,   Money.of(250, real))//1
 				.lance(isabela, Money.of(300, real))
 				.lance(diego,   Money.of(350, real))//2
@@ -154,7 +156,7 @@ public class LeilaoTest {
 				.dobrarLance(diego)//7, ignorado, aceita somente 5 lances do mesmo usuario
 				.create();
 
-		assertThat(leilao.getLances().size(), is(9));
+		assertThat(leilao.getLances(), hasSize(9));
 		int ultimo = leilao.getLances().size()-1;
 		assertThat(leilao.getLances().get(ultimo), equalTo(lance(diego, Money.of(1800, real))));
 		//assertThat(leilao.getLances().get(ultimo), equalTo(lance(diego, Money.of(3000, real))));
@@ -162,7 +164,7 @@ public class LeilaoTest {
 	
 	@Test
 	public void naoDeveAceitarLanceMenorQueOAnterior() {
-		Leilao leilao = LeilaoBuilder.of("Playstation 3", real)
+		Leilao leilao = CriadorDeLeilao.para("Playstation 3", real)
 				.lance(diego,   Money.of(250, real))
 				.lance(isabela, Money.of(249, real))
 				.lance(diego,   Money.of(200, real))
@@ -171,34 +173,30 @@ public class LeilaoTest {
 				.create();
 
 		List<Lance> lances = leilao.getLances();
-		assertThat(lances.size(), is(1));
+		assertThat(lances, hasSize(1));
 		assertThat(lances.get(0).getValor(), equalTo(Money.of(250, real)));
 	}
 	
 	@Test(expected=NullPointerException.class)
 	public void naoDeveAceitarLeilaoSemDescricao() {
-		@SuppressWarnings("unused")
-		Leilao leilao = LeilaoBuilder.of(null, real)
-				.lance(null,  Money.of(1000, real))
-				.create();
+		CriadorDeLeilao.para(null, real)
+		.create();
 	}
 	
 	@Test(expected=NullPointerException.class)
 	public void naoDeveAceitarLeilaoSemMoedaDefinida() {
-		@SuppressWarnings("unused")
-		Leilao leilao = LeilaoBuilder.of("Playstation 3", null)
-				.lance(null,  Money.of(1000, real))
-				.create();
+		CriadorDeLeilao.para("Playstation 3", null)
+		.create();
 	}
 	
 	@Test
 	public void deveReceberUmLance() {
-		Leilao leilao = LeilaoBuilder.of("Macbook Pro 15", real).create();
+		Leilao leilao = CriadorDeLeilao.para("Macbook Pro 15", real).create();
 
 		Lance lance = lance(diego, Money.of(2000, real));
-		leilao.propoe(lance);
+		leilao.propor(lance);
 
-		assertThat(leilao.getLances().size(), equalTo(1));
+		assertThat(leilao.getLances(), hasSize(1));
 		assertThat(leilao, temUmLance(lance));
 	}
 }

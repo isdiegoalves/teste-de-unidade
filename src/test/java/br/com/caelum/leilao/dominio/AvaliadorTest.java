@@ -16,7 +16,7 @@ import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.caelum.leilao.builder.LeilaoBuilder;
+import br.com.caelum.leilao.builder.CriadorDeLeilao;
 
 public class AvaliadorTest {
 
@@ -37,7 +37,7 @@ public class AvaliadorTest {
 
 	@Test
 	public void deveAvaliarOMaiorOMenorEMediaLances() {
-		Leilao leilao = LeilaoBuilder.of("Playstation 3", real)
+		Leilao leilao = CriadorDeLeilao.para("Playstation 3", real)
 				.lance(jose,  Money.of(250, real))
 				.lance(joao,  Money.of(300, real))
 				.lance(maria, Money.of(400, real))
@@ -54,7 +54,7 @@ public class AvaliadorTest {
 
 	@Test
 	public void deveAvaliarOsTresMaioresLancesEmOrdemCrescente() {
-		Leilao leilao = LeilaoBuilder.of("Playstation 3", real)
+		Leilao leilao = CriadorDeLeilao.para("Playstation 3", real)
 				.lance(jose,  Money.of(250, real))
 				.lance(joao,  Money.of(300, real))
 				.lance(jose,  Money.of(400, real))
@@ -74,7 +74,7 @@ public class AvaliadorTest {
 	
 	@Test
 	public void deveAvaliarLancesEmOrdemDecrescenteEAceitarSomenteOPrimeiro() {
-		Leilao leilao = LeilaoBuilder.of("Playstation 3", real)
+		Leilao leilao = CriadorDeLeilao.para("Playstation 3", real)
 				.lance(joao, Money.of(1000, real))
 				.lance(maria, Money.of(900, real))//ignorado, nao eh permitido lance menor que o anterior
 				.lance(jose,  Money.of(400, real))//ignorado, nao eh permitido lance menor que o anterior
@@ -91,7 +91,7 @@ public class AvaliadorTest {
 
 	@Test(expected=UnsupportedOperationException.class)
 	public void naoDeveAvaliarLeilaoSemLanceDado() {
-		Leilao leilao = LeilaoBuilder.of("Playstation 3", real).create();
+		Leilao leilao = CriadorDeLeilao.para("Playstation 3", real).create();
 
 		leiloeiro.avalia(leilao);
 	}

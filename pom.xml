@@ -15,7 +15,9 @@
 		<version.maven-compile.plugin>3.5.1</version.maven-compile.plugin>
 		<version.surefire.plugin>2.19.1</version.surefire.plugin>
 		<version.junit>4.12</version.junit>
+		<version.mockito>1.10.19</version.mockito>
 		<version.moneta>1.1</version.moneta>
+		<version.hamcrest>1.3</version.hamcrest>
 	</properties>
 
 	<dependencies>
@@ -24,6 +26,21 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 			<version>${version.junit}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-all</artifactId>
+			<version>${version.hamcrest}</version>
+			<scope>test</scope>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>${version.mockito}</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
