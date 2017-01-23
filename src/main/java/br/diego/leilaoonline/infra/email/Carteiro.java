@@ -1,6 +1,6 @@
 package br.diego.leilaoonline.infra.email;
 
-import br.diego.leilaoonline.leilao.entity.Leilao;
+import br.diego.leilaoonline.leilao.model.Leilao;
 
 public interface Carteiro {
 

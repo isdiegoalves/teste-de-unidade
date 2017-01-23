@@ -25,10 +25,10 @@ import org.junit.Test;
 import org.mockito.InOrder;
 
 import br.diego.leilaoonline.infra.email.Carteiro;
-import br.diego.leilaoonline.leilao.boundary.LeilaoRepositorio;
 import br.diego.leilaoonline.leilao.builder.CriadorDeLeilao;
-import br.diego.leilaoonline.leilao.control.EncerradorDeLeilao;
-import br.diego.leilaoonline.leilao.entity.Leilao;
+import br.diego.leilaoonline.leilao.model.Leilao;
+import br.diego.leilaoonline.leilao.repository.LeilaoRepositorio;
+import br.diego.leilaoonline.leilao.service.EncerradorDeLeilao;
 
 public class EncerradorDeLeilaoTest {
 

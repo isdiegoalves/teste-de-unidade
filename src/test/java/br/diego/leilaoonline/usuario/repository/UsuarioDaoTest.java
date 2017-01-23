@@ -11,8 +11,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.diego.leilaoonline.infra.persistence.CriadorDeSessao;
-import br.diego.leilaoonline.usuario.entity.Usuario;
+import br.diego.leilaoonline.infra.persistence.hibernate.CriadorDeSessao;
+import br.diego.leilaoonline.usuario.model.Usuario;
 
 public class UsuarioDaoTest {
 	

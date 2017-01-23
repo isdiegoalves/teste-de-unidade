@@ -1,6 +1,6 @@
 package br.diego.leilaoonline.leilao.repository;
 
-import static br.diego.leilaoonline.lance.entity.Lance.lance;
+import static br.diego.leilaoonline.lance.model.Lance.lance;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
@@ -18,10 +18,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.diego.leilaoonline.infra.persistence.CriadorDeSessao;
-import br.diego.leilaoonline.leilao.control.LeilaoDao;
-import br.diego.leilaoonline.leilao.entity.Leilao;
-import br.diego.leilaoonline.usuario.entity.Usuario;
+import br.diego.leilaoonline.infra.persistence.hibernate.CriadorDeSessao;
+import br.diego.leilaoonline.leilao.model.Leilao;
+import br.diego.leilaoonline.leilao.service.LeilaoDao;
+import br.diego.leilaoonline.usuario.model.Usuario;
 import br.diego.leilaoonline.usuario.repository.UsuarioDao;
 
 public class LeilaoDaoTest {
@@ -342,10 +342,9 @@ public class LeilaoDaoTest {
 		
 		List<Leilao> novos = leilaoDao.listaLeiloesDoUsuario(diego);
 		
-		assertThat(novos, hasSize(3));
+		assertThat(novos, hasSize(2));
 		assertThat(novos.get(0).getDescricao(), equalTo("Geladeira"));
-		assertThat(novos.get(1).getDescricao(), equalTo("Geladeira"));
-		assertThat(novos.get(2).getDescricao(), equalTo("Playstation"));
+		assertThat(novos.get(1).getDescricao(), equalTo("Playstation"));
 	}
 	
 

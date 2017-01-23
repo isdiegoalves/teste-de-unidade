@@ -2,7 +2,7 @@ package br.diego.leilaoonline.usuario.repository;
 
 import org.hibernate.Session;
 
-import br.diego.leilaoonline.usuario.entity.Usuario;
+import br.diego.leilaoonline.usuario.model.Usuario;
 
 public class UsuarioDao {
 

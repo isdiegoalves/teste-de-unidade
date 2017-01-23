@@ -1,6 +1,6 @@
 package br.diego.leilaoonline.pagamento;
 
-import static br.diego.leilaoonline.usuario.entity.Usuario.usuario;
+import static br.diego.leilaoonline.usuario.model.Usuario.usuario;
 import static java.time.DayOfWeek.MONDAY;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -22,15 +22,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
-import br.diego.leilaoonline.avaliador.entity.Avaliador;
-import br.diego.leilaoonline.infra.relogio.boundary.Relogio;
-import br.diego.leilaoonline.leilao.boundary.LeilaoRepositorio;
+import br.diego.leilaoonline.avaliador.model.Avaliador;
+import br.diego.leilaoonline.infra.relogio.service.Relogio;
 import br.diego.leilaoonline.leilao.builder.CriadorDeLeilao;
-import br.diego.leilaoonline.leilao.entity.Leilao;
-import br.diego.leilaoonline.pagamento.control.GeradorDePagamento;
-import br.diego.leilaoonline.pagamento.control.PagamentoRepositorio;
+import br.diego.leilaoonline.leilao.model.Leilao;
+import br.diego.leilaoonline.leilao.repository.LeilaoRepositorio;
 import br.diego.leilaoonline.pagamento.entity.Pagamento;
-import br.diego.leilaoonline.usuario.entity.Usuario;
+import br.diego.leilaoonline.pagamento.service.GeradorDePagamento;
+import br.diego.leilaoonline.pagamento.service.PagamentoRepositorio;
+import br.diego.leilaoonline.usuario.model.Usuario;
 
 public class GeradorDePagamentoTest {
 	

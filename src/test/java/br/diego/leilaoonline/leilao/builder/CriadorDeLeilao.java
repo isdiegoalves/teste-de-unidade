@@ -1,6 +1,6 @@
 package br.diego.leilaoonline.leilao.builder;
 
-import static br.diego.leilaoonline.leilao.entity.Leilao.leilao;
+import static br.diego.leilaoonline.leilao.model.Leilao.leilao;
 import static java.time.LocalDate.now;
 import static java.util.Objects.requireNonNull;
 
@@ -9,9 +9,9 @@ import java.time.LocalDate;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 
-import br.diego.leilaoonline.lance.entity.Lance;
-import br.diego.leilaoonline.leilao.entity.Leilao;
-import br.diego.leilaoonline.usuario.entity.Usuario;
+import br.diego.leilaoonline.lance.model.Lance;
+import br.diego.leilaoonline.leilao.model.Leilao;
+import br.diego.leilaoonline.usuario.model.Usuario;
 
 public class CriadorDeLeilao {
 
