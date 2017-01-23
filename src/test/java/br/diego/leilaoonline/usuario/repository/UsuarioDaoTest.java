@@ -14,7 +14,7 @@ import org.junit.Test;
 import br.diego.leilaoonline.infra.persistence.CriadorDeSessao;
 import br.diego.leilaoonline.usuario.entity.Usuario;
 
-public class UsuarioDaoIT {
+public class UsuarioDaoTest {
 	
 	private Session session;
 	private UsuarioDao usuarioDao;

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.money.CurrencyUnit;
+import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 
 import br.diego.leilaoonline.lance.entity.Lance;
@@ -21,7 +22,7 @@ public class LeilaoBuilder {
 	private String descricao;
 	private LocalDate dataAbertura = LocalDate.now();
 	private List<Lance> lances = new ArrayList<>();
-	private CurrencyUnit moeda;
+	private CurrencyUnit moeda = Monetary.getCurrency("BRL");
 	private AtomicBoolean encerrado = new AtomicBoolean(false);
 	private MonetaryAmount valorInicial;
 	private Usuario dono;

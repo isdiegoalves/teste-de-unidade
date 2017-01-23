@@ -12,6 +12,7 @@ import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.diego.leilaoonline.leilao.entity.Leilao;
 import br.diego.leilaoonline.usuario.entity.Usuario;
 
 public class LanceTest {
@@ -27,7 +28,8 @@ public class LanceTest {
 	
 	@Test
 	public void devePermitirLanceComUsuarioEValorDoLance() {
-		Lance lance = lance(joao,  Money.of(1000, real), null);
+		Lance lance = lance(joao,  Money.of(1000, real), Leilao.builder().descricao("Geladeira")
+				.create());
 		
 		assertThat(lance.getUsuario(), equalTo(joao));
 		assertThat(lance.getValor(), equalTo(Money.of(1000, real)));
@@ -45,6 +47,7 @@ public class LanceTest {
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void naoDevePermitirLanceSemLanceComValorNegativoOuZero() {
-		lance(joao,  Money.of(-1000, real), null);
+		lance(joao,  Money.of(-1000, real), Leilao.builder().descricao("Geladeira")
+				.create());
 	}
 }

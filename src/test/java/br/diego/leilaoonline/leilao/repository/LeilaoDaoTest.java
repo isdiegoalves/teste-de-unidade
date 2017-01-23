@@ -58,7 +58,6 @@ public class LeilaoDaoTest {
 				.descricao("Televisão")
 				.dataAbertura(LocalDate.of(2017, 1, 1))
 				.encerrado(false)
-				.moedaParaLance(Monetary.getCurrency("BRL"))
 				.usado(true)
 				.dono(Usuario.fromId(1L))
 				.create();
@@ -89,7 +88,6 @@ public class LeilaoDaoTest {
 		.descricao("Geladeira")
 		.dataAbertura(LocalDate.now())
 		.encerrado(false)
-		.moedaParaLance(Monetary.getCurrency("BRL"))
 		.usado(false)
 		.dono(Usuario.fromId(1L))
 		.create();
@@ -98,7 +96,6 @@ public class LeilaoDaoTest {
 				.descricao("Geladeira")
 				.dataAbertura(LocalDate.now())
 				.encerrado(true)
-				.moedaParaLance(Monetary.getCurrency("BRL"))
 				.usado(false)
 				.dono(Usuario.fromId(1L))
 				.create();
@@ -118,7 +115,6 @@ public class LeilaoDaoTest {
 		.descricao("Geladeira")
 		.dataAbertura(LocalDate.now())
 		.encerrado(true)
-		.moedaParaLance(Monetary.getCurrency("BRL"))
 		.usado(true)
 		.dono(Usuario.fromId(1L))
 		.create();
@@ -250,7 +246,6 @@ public class LeilaoDaoTest {
 				.descricao("Televisão")
 				.dataAbertura(LocalDate.now().minusDays(8))
 				.encerrado(false)
-				.moedaParaLance(Monetary.getCurrency("BRL"))
 				.usado(true)
 				.dono(Usuario.fromId(1L))
 				.create();
