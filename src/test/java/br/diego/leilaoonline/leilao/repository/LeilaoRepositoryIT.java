@@ -27,7 +27,7 @@ import br.diego.leilaoonline.leilao.model.Leilao;
 import br.diego.leilaoonline.usuario.model.Usuario;
 import br.diego.leilaoonline.usuario.repository.UsuarioDao;
 
-public class LeilaoDaoTest {
+public class LeilaoRepositoryIT {
 
 	private Session session;
 	private LeilaoDao leilaoDao;
