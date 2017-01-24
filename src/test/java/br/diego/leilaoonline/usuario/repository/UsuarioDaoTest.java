@@ -1,5 +1,6 @@
 package br.diego.leilaoonline.usuario.repository;
 
+import static br.diego.leilaoonline.usuario.model.Usuario.usuario;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -19,6 +20,20 @@ public class UsuarioDaoTest {
 	private Session session;
 	private UsuarioDao usuarioDao;
 	
+	@Before
+	public void before() {
+		session = new CriadorDeSessao().session();
+		session.beginTransaction();
+		usuarioDao = new UsuarioDao(session);
+		
+	}
+	
+	@After
+	public void after() {
+		session.getTransaction().rollback();
+		session.close();
+	}
+	
 	@Test
 	public void deveEncontrarPeloNomeEEmail() {
 
@@ -35,17 +50,29 @@ public class UsuarioDaoTest {
 		usuarioDao.porNomeEEmail("debora", "debora@alves.com");
 	}
 
-	@Before
-	public void before() {
-		session = new CriadorDeSessao().session();
-		session.beginTransaction();
-		usuarioDao = new UsuarioDao(session);
+	@Test(expected=NoResultException.class)
+	public void deveDeletarUmUsuario() {
 		
+		Usuario usuario = usuario("camila", "camila@estefani.com");
+		usuarioDao.salvar(usuario);
+		
+		usuarioDao.deletar(usuario);
+
+		usuarioDao.porNomeEEmail("camila", "camila@estefani.com");
 	}
 	
-	@After
-	public void after() {
-		session.getTransaction().rollback();
-		session.close();
+	@Test(expected=NoResultException.class)
+	public void deveAlterarUmUsuario() {
+		
+		Usuario usuario = usuario("camila", "camila@estefani.com");
+		usuarioDao.salvar(usuario);
+		session.flush();
+		
+		Usuario usuarioAAlterar = usuarioDao.porId(usuario.getId());
+		usuarioAAlterar.setEmail("camila@lima.com");
+		
+		usuarioDao.atualizar(usuarioAAlterar);
+		
+		usuarioDao.porNomeEEmail("camila", "camila@estefani.com");
 	}
 }

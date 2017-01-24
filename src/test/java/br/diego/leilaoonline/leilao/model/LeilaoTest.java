@@ -1,7 +1,7 @@
 package br.diego.leilaoonline.leilao.model;
 
 import static br.diego.leilaoonline.lance.model.Lance.lance;
-import static br.diego.leilaoonline.leilao.LeilaoMatcher.temUmLance;
+import static br.diego.leilaoonline.leilao.infra.LeilaoMatcher.temUmLance;
 import static br.diego.leilaoonline.usuario.model.Usuario.usuario;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
@@ -22,6 +22,7 @@ import org.junit.Test;
 
 import br.diego.leilaoonline.lance.model.Lance;
 import br.diego.leilaoonline.leilao.builder.CriadorDeLeilao;
+import br.diego.leilaoonline.leilao.infra.LeilaoMatcher;
 import br.diego.leilaoonline.usuario.model.Usuario;
 
 public class LeilaoTest {

@@ -13,18 +13,19 @@ public class UsuarioDao {
 	}
 
 	public Usuario porId(Long id) {
-		return (Usuario) session.load(Usuario.class, id);
+		return (Usuario) session.get(Usuario.class, id);
 	}
 
 	public Usuario porNomeEEmail(String nome, String email) {
-		return session.createQuery("from Usuario u where u.nome = :nome and u.email = :email", Usuario.class)
+		return session.createQuery("select u from Usuario u where u.nome = :nome and u.email = :email", Usuario.class)
 				.setParameter("nome", nome)
 				.setParameter("email", email)
 				.getSingleResult();
 	}
 
-	public void salvar(Usuario usuario) {
-		session.save(usuario);
+	public Long salvar(Usuario usuario) {
+		Long idUsuario = (Long) session.save(usuario);
+		return idUsuario;
 	}
 
 	public void atualizar(Usuario usuario) {

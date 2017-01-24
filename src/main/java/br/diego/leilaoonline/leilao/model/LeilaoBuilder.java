@@ -4,9 +4,9 @@ import static java.util.Objects.requireNonNull;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
@@ -16,14 +16,13 @@ import br.diego.leilaoonline.lance.model.Lance;
 import br.diego.leilaoonline.usuario.model.Usuario;
 
 public class LeilaoBuilder {
-	
 
 	private Long id;
 	private String descricao;
 	private LocalDate dataAbertura = LocalDate.now();
 	private List<Lance> lances = new ArrayList<>();
 	private CurrencyUnit moeda = Monetary.getCurrency("BRL");
-	private AtomicBoolean encerrado = new AtomicBoolean(false);
+	private boolean encerrado;
 	private MonetaryAmount valorInicial;
 	private Usuario dono;
 	private boolean usado;
@@ -62,6 +61,11 @@ public class LeilaoBuilder {
 		this.lances.add(lance);
 		return this;
 	}
+	
+	public LeilaoBuilder lances(Collection<Lance> lances) {
+		this.lances.addAll(lances);
+		return this;
+	}
 
 	public LeilaoBuilder moedaParaLance(CurrencyUnit moeda) {
 		this.moeda = moeda;
@@ -69,14 +73,14 @@ public class LeilaoBuilder {
 	}
 	
 	public LeilaoBuilder encerrado(boolean encerrado) {
-		this.encerrado = new AtomicBoolean(encerrado);
+		this.encerrado = encerrado;
 		return this;
 	}
 
 	public Leilao create() {
 		requireNonNull(descricao, "descricao nao pode ser nulo!");
 		requireNonNull(dataAbertura, "dataAbertura nao pode ser nulo!");
-		requireNonNull(moeda, "valor nao pode ser nulo!");
+		requireNonNull(moeda, "moeda nao pode ser nulo!");
 		return new Leilao(this);
 	}
 
@@ -100,7 +104,7 @@ public class LeilaoBuilder {
 		return moeda;
 	}
 
-	public AtomicBoolean getEncerrado() {
+	public boolean isEncerrado() {
 		return encerrado;
 	}
 

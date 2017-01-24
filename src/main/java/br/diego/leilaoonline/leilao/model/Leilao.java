@@ -2,20 +2,18 @@ package br.diego.leilaoonline.leilao.model;
 
 import static br.diego.leilaoonline.lance.model.Lance.lance;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -26,32 +24,19 @@ import br.diego.leilaoonline.usuario.model.Usuario;
 @Entity
 public class Leilao {
 
-	@Id @GeneratedValue
-	private final Long id;
-	private final LocalDate dataAbertura;
-	private final String descricao;
-	private final MonetaryAmount valorInicial;
-	private final CurrencyUnit moeda;
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
+	private LocalDate dataAbertura;
+	private String descricao;
+	private MonetaryAmount valorInicial;
+	private CurrencyUnit moeda;
 	@ManyToOne
-	private final Usuario dono;
+	private Usuario dono;
 	@OneToMany(cascade=CascadeType.ALL, orphanRemoval=true, mappedBy="leilao")
-	private final List<Lance> lances;
-	private final AtomicBoolean encerrado;
-	private final boolean usado;
+	private List<Lance> lances;
+	private boolean encerrado;
+	private boolean usado;
 
-	public Leilao(LeilaoBuilder builder) {
-		this.id 			= builder.getId();
-		this.descricao 		= builder.getDescricao();
-		this.moeda 			= builder.getMoeda();
-		this.dataAbertura 	= builder.getDataAbertura();
-		this.encerrado 		= builder.getEncerrado();
-		this.valorInicial 	= builder.getValorInicial();
-		this.usado 			= builder.isUsado();
-		this.dono 			= builder.getDono();
-		this.lances 		= new ArrayList<>();
-		builder.getLances().stream().forEach(lance -> this.propor(lance));
-	}
-	
 	public static Leilao leilao(int id, String descricaoItem, LocalDate dataAbertura, CurrencyUnit moedaParaLance) {
 		return builder()
 			.descricao(descricaoItem)
@@ -68,20 +53,38 @@ public class Leilao {
 		.create();
 	}
 	
+	protected Leilao() {}
+	
+	public Leilao(LeilaoBuilder builder) {
+		this.id 			= builder.getId();
+		this.descricao 		= builder.getDescricao();
+		this.moeda 			= builder.getMoeda();
+		this.dataAbertura 	= builder.getDataAbertura();
+		this.encerrado 		= builder.isEncerrado();
+		this.valorInicial 	= builder.getValorInicial();
+		this.usado 			= builder.isUsado();
+		this.dono 			= builder.getDono();
+		this.lances 		= new ArrayList<>();
+		builder.getLances().stream().forEach(lance -> this.propor(lance));
+	}
+	
 	public static LeilaoBuilder builder() {
 		return new LeilaoBuilder();
 	}
-	
-	public static Leilao fromResultSet(ResultSet rs, CurrencyUnit real) throws SQLException {
-		return builder()
-				.id(rs.getLong("id"))
-				.descricao(rs.getString("descricao"))
-				.dataAbertura(rs.getDate("data").toLocalDate())
-				.moedaParaLance(real)
-				.encerrado(rs.getBoolean("encerrado"))
-				.create();
-	}
 
+	public LeilaoBuilder getBuilder() {
+		return builder()
+				.id(id)
+				.descricao(descricao)
+				.moedaParaLance(moeda)
+				.dataAbertura(dataAbertura)
+				.encerrado(encerrado)
+				.valorInicial(valorInicial)
+				.usado(usado)
+				.dono(dono)
+				.lances(lances);
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -103,11 +106,11 @@ public class Leilao {
 	}
 
 	public boolean isEncerrado() {
-		return encerrado.get();
+		return encerrado;
 	}
 
 	public void encerrar() {
-		this.encerrado.set(true);
+		this.encerrado = true;
 	}
 
 	public void propor(Lance lance) {

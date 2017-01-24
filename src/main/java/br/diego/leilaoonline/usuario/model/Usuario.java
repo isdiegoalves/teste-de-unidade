@@ -2,54 +2,25 @@ package br.diego.leilaoonline.usuario.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class Usuario {
 	
-	@Id @GeneratedValue
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
 	private String email;
 	
 	protected Usuario() {}
 	
-	public static Usuario fromId(Long id) {
-		Usuario u = new Usuario();
-		u.id = id;
-		return u;
+	public Usuario(UsuarioBuilder builder) {
+		this.id 	= builder.getId();
+		this.nome 	= builder.getNome();
+		this.email 	= builder.getEmail();
 	}
 	
-	public static Usuario usuario(String nome, String email) {
-		if (nome == null)
-			throw new NullPointerException("nome não pode ser nulo!");
-		
-		if (nome.trim().length() == 0)
-			throw new IllegalArgumentException("nome não pode em branco!");
-		
-		if (nome.matches("^[ 0-9-].*"))
-			throw new IllegalArgumentException("nome não pode iniciar com caracteres invalidos!");
-		
-		Usuario usuario = new Usuario();
-		usuario.nome = nome;
-		usuario.email = email;
-		return usuario;
-	}
-	
-	public static Usuario usuario(String nome) {
-		if (nome == null)
-			throw new NullPointerException("nome não pode ser nulo!");
-		
-		if (nome.trim().length() == 0)
-			throw new IllegalArgumentException("nome não pode em branco!");
-		
-		if (nome.matches("^[ 0-9-].*"))
-			throw new IllegalArgumentException("nome não pode iniciar com caracteres invalidos!");
-		
-		Usuario usuario = new Usuario();
-		usuario.nome = nome;
-		return usuario;
-	}
 	
 	public Long getId() {
 		return id;
@@ -62,6 +33,42 @@ public class Usuario {
 	public String getEmail() {
 		return email;
 	}
+	
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public static UsuarioBuilder builder() {
+		return new UsuarioBuilder();
+	}
+	
+	public static Usuario fromId(Long id) {
+		return builder()
+				.id(id)
+				.build();
+	}
+	
+	public static Usuario usuario(String nome, String email) {
+		return builder()
+				.nome(nome)
+				.email(email)
+				.build();
+	}
+	
+	public static Usuario usuario(String nome) {
+		return builder()
+				.nome(nome)
+				.build();
+	}
+	
 
 	@Override
 	public int hashCode() {
@@ -99,5 +106,4 @@ public class Usuario {
 			return false;
 		return true;
 	}
-
 }

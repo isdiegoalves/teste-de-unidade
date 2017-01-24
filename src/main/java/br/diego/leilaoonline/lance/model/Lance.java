@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import javax.money.MonetaryAmount;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
@@ -14,19 +15,15 @@ import br.diego.leilaoonline.usuario.model.Usuario;
 @Entity
 public class Lance {
 
-	@Id @GeneratedValue
-	private final Long id;
-	private final LocalDate data;
-	private final MonetaryAmount valor;
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
+	private LocalDate data;
+	private MonetaryAmount valor;
 	@ManyToOne
-	private final Usuario usuario;
+	private Usuario usuario;
 	@ManyToOne
-	private final Leilao leilao;
+	private Leilao leilao;
 	
-	public static LanceBuilder builder() {
-		return new LanceBuilder();
-	}
-
 	public static Lance lance(Usuario usuario, MonetaryAmount valor, Leilao leilao) {
 		return builder()
 				.usuario(usuario)
@@ -43,8 +40,9 @@ public class Lance {
 				.leilao(leilao)
 				.build();
 	}
-
-	protected Lance(LanceBuilder builder) {
+	
+	protected Lance() {}
+	public Lance(LanceBuilder builder) {
 		this.id 		= builder.getId();
 		this.valor 		= builder.getValor();
 		this.data 		= builder.getData();
@@ -70,6 +68,10 @@ public class Lance {
 
 	public MonetaryAmount getValor() {
 		return valor;
+	}
+	
+	public static LanceBuilder builder() {
+		return new LanceBuilder();
 	}
 	
 	public LanceBuilder getLanceBuilder() {

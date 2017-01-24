@@ -5,22 +5,25 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.core.IsNull.nullValue;
+import static org.javamoney.moneta.function.MonetaryOperators.rounding;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
+import javax.money.MonetaryAmount;
 
 import org.hibernate.Session;
 import org.javamoney.moneta.Money;
+import org.javamoney.moneta.RoundedMoney;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import br.diego.leilaoonline.infra.persistence.hibernate.CriadorDeSessao;
 import br.diego.leilaoonline.leilao.model.Leilao;
-import br.diego.leilaoonline.leilao.service.LeilaoDao;
 import br.diego.leilaoonline.usuario.model.Usuario;
 import br.diego.leilaoonline.usuario.repository.UsuarioDao;
 
@@ -31,6 +34,22 @@ public class LeilaoDaoTest {
 	private CurrencyUnit dollar;
 	private CurrencyUnit real;
 	private UsuarioDao usuarioDao;
+	
+	@Before
+	public void before() {
+		real = Monetary.getCurrency("BRL");
+		dollar = Monetary.getCurrency("USD");
+		session = new CriadorDeSessao().session();
+		session.beginTransaction();
+		leilaoDao = new LeilaoDao(session);
+		usuarioDao = new UsuarioDao(session);
+	}
+	
+	@After
+	public void after() {
+		session.getTransaction().rollback();
+		session.close();
+	}
 	
 	@Test
 	public void deveTrazerSomenteLeiloesNovos() {
@@ -347,20 +366,85 @@ public class LeilaoDaoTest {
 		assertThat(novos.get(1).getDescricao(), equalTo("Playstation"));
 	}
 	
+	@Test
+	public void deveTrazerMediaLanceInicialLeiloes() {
+		
+		Usuario diego = usuarioDao.porId(1L);
+		Usuario isabela = usuarioDao.porId(2L);
+		
+		Leilao leilaoTV = Leilao.builder()
+				.descricao("Televisão")
+				.dataAbertura(LocalDate.now())
+				.encerrado(false)
+				.valorInicial(Money.of(200, real))
+				.moedaParaLance(real)
+				.usado(false)
+				.dono(diego)
+				.create();
+		
+		leilaoTV.propor(lance(diego,  	Money.of(200, real), leilaoTV));
+		leilaoTV.propor(lance(isabela,	Money.of(300, real), leilaoTV));
+		leilaoTV.propor(lance(diego,  	Money.of(350, real), leilaoTV));
+		
+		Leilao leilaoGeladeira= Leilao.builder()
+		.descricao("Geladeira")
+		.dataAbertura(LocalDate.now())
+		.encerrado(false)
+		.valorInicial(Money.of(500, real))
+		.moedaParaLance(real)
+		.usado(false)
+		.dono(diego)
+		.create();
+		
+		leilaoGeladeira.propor(lance(diego,  	Money.of(1000, real), leilaoGeladeira));
+		leilaoGeladeira.propor(lance(isabela,	Money.of(1100, real), leilaoGeladeira));
+		leilaoGeladeira.propor(lance(diego,  	Money.of(1200, real), leilaoGeladeira));
+		leilaoGeladeira.propor(lance(isabela,	Money.of(1300, real), leilaoGeladeira));
 
-	@Before
-	public void before() {
-		real = Monetary.getCurrency("BRL");
-		dollar = Monetary.getCurrency("USD");
-		session = new CriadorDeSessao().session();
-		session.beginTransaction();
-		leilaoDao = new LeilaoDao(session);
-		usuarioDao = new UsuarioDao(session);
+		
+		Leilao leilaoPlaystation = Leilao.builder()
+				.descricao("Playstation")
+				.dataAbertura(LocalDate.now())
+				.encerrado(false)
+				.valorInicial(Money.of(800, real))
+				.moedaParaLance(dollar)
+				.usado(false)
+				.dono(isabela)
+				.create();
+		
+		leilaoPlaystation.propor(lance(diego,  	Money.of(1000, real), leilaoPlaystation));
+		leilaoPlaystation.propor(lance(isabela,	Money.of(1100, real), leilaoPlaystation));
+		
+		leilaoDao.salvar(leilaoTV);
+		leilaoDao.salvar(leilaoGeladeira);
+		leilaoDao.salvar(leilaoPlaystation);
+		
+		MonetaryAmount media = leilaoDao.getValorInicialMedioDoUsuario(diego, real);
+		
+		assertThat(media, equalTo(RoundedMoney.of(350, real, rounding())));
 	}
 	
-	@After
-	public void after() {
-		session.getTransaction().rollback();
-		session.close();
+	
+	@Test
+	public void deveDeletarUmLeilao() {
+		
+		Usuario diego = usuarioDao.porId(1L);
+		
+		Leilao leilaoPlaystation = Leilao.builder()
+				.descricao("Playstation")
+				.dataAbertura(LocalDate.now())
+				.encerrado(false)
+				.valorInicial(Money.of(800, real))
+				.moedaParaLance(dollar)
+				.usado(false)
+				.dono(diego)
+				.create();
+		
+		leilaoDao.salvar(leilaoPlaystation);
+		leilaoDao.deleta(leilaoPlaystation);
+		Leilao leilao = leilaoDao.porId(leilaoPlaystation.getId());
+		
+		assertThat(leilao, nullValue());
 	}
+	
 }
