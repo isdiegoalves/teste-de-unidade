@@ -1,5 +1,7 @@
 package br.diego.leilaoonline;
 
+import static java.lang.System.setProperty;
+
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
@@ -19,7 +21,7 @@ public class BuscaGoogleSystemTest {
 
 	@Test
 	public void googleBuscaIE() {
-		System.setProperty("webdriver.ie.driver","src/test/resources/selenium/iedriver.exe");
+		setProperty("webdriver.ie.driver","src/test/resources/selenium/iedriver.exe");
 		WebDriver driver = new InternetExplorerDriver();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
@@ -34,7 +36,7 @@ public class BuscaGoogleSystemTest {
 
 	@Test
 	public void googleBuscaChrome() throws InterruptedException {
-		System.setProperty("webdriver.chrome.driver", "src/test/resources/selenium/chromedriver.exe");
+		setProperty("webdriver.chrome.driver", "src/test/resources/selenium/chromedriver.exe");
 		WebDriver driver = new ChromeDriver();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
@@ -49,7 +51,7 @@ public class BuscaGoogleSystemTest {
 
 	@Test
 	public void googleBuscaFirefox() throws InterruptedException {
-		System.setProperty("webdriver.gecko.driver", "src/test/resources/selenium/geckodriver.exe");
+		setProperty("webdriver.gecko.driver", "src/test/resources/selenium/geckodriver.exe");
 		FirefoxProfile profile = new FirefoxProfile();
 		WebDriver driver = new FirefoxDriver(new FirefoxBinary(new File("D:\\Aplic32\\Mozilla Firefox\\firefox.exe")), profile);
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -65,7 +67,7 @@ public class BuscaGoogleSystemTest {
 	
 	@Test
 	public void googleBuscaPhantomJS() throws InterruptedException {
-		System.setProperty("phantomjs.binary.path", "src/test/resources/selenium/phantomjs.exe");
+		setProperty("phantomjs.binary.path", "src/test/resources/selenium/phantomjs.exe");
 		DesiredCapabilities dc = new DesiredCapabilities();
 		dc.setJavascriptEnabled(true);
 		WebDriver driver = new PhantomJSDriver(dc);
