@@ -1,4 +1,4 @@
-package br.diego.leilaoonline.leilao.infra;
+package br.diego.leilaoonline.leilao.util;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

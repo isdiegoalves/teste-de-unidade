@@ -28,6 +28,7 @@ public class CriadorDeSessao {
 				.applySetting("hibernate.connection.url", "jdbc:hsqldb:leilaoonline.db;shutdown=true")
 				.applySetting("hibernate.connection.username", "sa")
 				.applySetting("hibernate.connection.password", "")
+				.applySetting("hibernate.hbm2ddl.auto", "create-drop")
 				.applySetting("hibernate.show_sql", "true")
 				.applySetting("hibernate.format_sql", "true")
 				.applySetting("javax.persistence.schema-generation.database.action", "drop-and-create")
