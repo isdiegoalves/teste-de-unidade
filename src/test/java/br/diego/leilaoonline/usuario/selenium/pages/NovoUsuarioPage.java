@@ -5,10 +5,9 @@ import org.openqa.selenium.WebDriver;
 
 public class NovoUsuarioPage {
 
-WebDriver driver; 
+	private final WebDriver driver; 
 	
 	public NovoUsuarioPage(WebDriver driver) {
-		super();
 		this.driver = driver;
 	}
 	
