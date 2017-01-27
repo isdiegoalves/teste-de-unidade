@@ -19,8 +19,11 @@ public class WebDrivers {
 
 	public static WebDriver ieWebDriver() {
 		setProperty("webdriver.ie.driver","src/test/resources/selenium/iedriver.exe");
-		WebDriver driver = new InternetExplorerDriver();
-		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();		
+		capabilities.setJavascriptEnabled(true);
+		capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true); 
+		WebDriver driver = new InternetExplorerDriver(capabilities);
+		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
 		return driver;
 	}
 
@@ -34,7 +37,7 @@ public class WebDrivers {
 	public static WebDriver firefoxWebDriver() {
 		setProperty("webdriver.gecko.driver", "src/test/resources/selenium/geckodriver.exe");
 		FirefoxProfile profile = new FirefoxProfile();
-		WebDriver driver = new FirefoxDriver(new FirefoxBinary(new File("D:\\Aplic32\\Mozilla Firefox\\firefox.exe")), profile);
+		WebDriver driver = new FirefoxDriver(new FirefoxBinary(new File("C:\\Program Files (x86)\\Firefox Developer Edition\\firefox.exe")), profile);
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		return driver;
 	}

@@ -19,7 +19,8 @@ public class UsuariosSystemTest {
 	
 	@Before
 	public void before() {
-		usuarios = new UsuariosPage(chromeWebDriver());
+		driver = chromeWebDriver();
+		usuarios = new UsuariosPage(driver);
 	}
 	
 	@After
