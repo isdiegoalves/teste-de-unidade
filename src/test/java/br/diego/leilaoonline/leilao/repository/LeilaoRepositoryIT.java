@@ -30,7 +30,7 @@ import br.diego.leilaoonline.usuario.repository.UsuarioDao;
 public class LeilaoRepositoryIT {
 
 	private Session session;
-	private LeilaoDao leilaoDao;
+	private LeilaoRepositoryImpl leilaoDao;
 	private CurrencyUnit dollar;
 	private CurrencyUnit real;
 	private UsuarioDao usuarioDao;
@@ -41,7 +41,7 @@ public class LeilaoRepositoryIT {
 		dollar = Monetary.getCurrency("USD");
 		session = new CriadorDeSessao().session();
 		session.beginTransaction();
-		leilaoDao = new LeilaoDao(session);
+		leilaoDao = new LeilaoRepositoryImpl(session);
 		usuarioDao = new UsuarioDao(session);
 	}
 	

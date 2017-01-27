@@ -1,6 +1,7 @@
 package br.diego.leilaoonline;
 
 import static br.diego.leilaoonline.infra.selenium.WebDrivers.chromeWebDriver;
+import static br.diego.leilaoonline.infra.selenium.WebDrivers.edgeWebDriver;
 import static br.diego.leilaoonline.infra.selenium.WebDrivers.firefoxWebDriver;
 import static br.diego.leilaoonline.infra.selenium.WebDrivers.ieWebDriver;
 import static br.diego.leilaoonline.infra.selenium.WebDrivers.phantomJSWebDriver;
@@ -56,6 +57,19 @@ public class BuscaGoogleSystemTest {
 		WebDriver driver = phantomJSWebDriver();
 
 		driver.get("https://www.google.com.br/");
+
+		WebElement searchBox = driver.findElement(By.name("q"));
+		searchBox.sendKeys("ChromeDriver");
+		searchBox.submit();
+
+		driver.quit();
+	}
+	
+	@Test
+	public void googleBuscaMicrosoftEdge() {
+		WebDriver driver = edgeWebDriver();
+		
+		driver.get("http://www.bing.com/?cc=br");
 
 		WebElement searchBox = driver.findElement(By.name("q"));
 		searchBox.sendKeys("ChromeDriver");

@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
@@ -43,6 +44,14 @@ public class WebDrivers {
 		DesiredCapabilities dc = new DesiredCapabilities();
 		dc.setJavascriptEnabled(true);
 		WebDriver driver = new PhantomJSDriver(dc);
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		return driver;
+	}
+
+	public static WebDriver edgeWebDriver() {
+		setProperty("webdriver.edge.driver", "src/test/resources/selenium/edgedriver.exe");
+		DesiredCapabilities capabilities = DesiredCapabilities.edge();
+		WebDriver driver = new EdgeDriver(capabilities);
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		return driver;
 	}
