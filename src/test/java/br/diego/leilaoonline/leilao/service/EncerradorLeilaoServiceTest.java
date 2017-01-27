@@ -1,4 +1,4 @@
-package br.diego.leilaoonline.leilao;
+package br.diego.leilaoonline.leilao.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -27,22 +27,23 @@ import org.mockito.InOrder;
 import br.diego.leilaoonline.infra.email.Carteiro;
 import br.diego.leilaoonline.leilao.builder.CriadorDeLeilao;
 import br.diego.leilaoonline.leilao.model.Leilao;
-import br.diego.leilaoonline.leilao.repository.LeilaoRepositorio;
-import br.diego.leilaoonline.leilao.service.EncerradorDeLeilao;
+import br.diego.leilaoonline.leilao.repository.LeilaoRepository;
+import br.diego.leilaoonline.leilao.service.EncerradorLeilaoService;
+import br.diego.leilaoonline.leilao.service.EncerradorLeilaoServiceImpl;
 
-public class EncerradorDeLeilaoTest {
+public class EncerradorLeilaoServiceTest {
 
 	private CurrencyUnit real;
-	private EncerradorDeLeilao encerrador;
-	private LeilaoRepositorio repositorioLeilao;
+	private EncerradorLeilaoService encerrador;
+	private LeilaoRepository repositorioLeilao;
 	private Carteiro carteiro;
 
 	@Before
 	public void setUp() {
 		real = Monetary.getCurrency("BRL");
 		carteiro = mock(Carteiro.class);
-		repositorioLeilao = mock(LeilaoRepositorio.class);
-		encerrador = new EncerradorDeLeilao(repositorioLeilao, carteiro);
+		repositorioLeilao = mock(LeilaoRepository.class);
+		encerrador = new EncerradorLeilaoServiceImpl(repositorioLeilao, carteiro);
 	}
 
 	@Test
@@ -53,13 +54,13 @@ public class EncerradorDeLeilaoTest {
 		Leilao leilao2 = CriadorDeLeilao.para("Geladeira", antiga, real).create();
 
 		List<Leilao> leiloesAntigos = Arrays.asList(leilao1, leilao2);
-		when(repositorioLeilao.correntes()).thenReturn(leiloesAntigos);
+		when(repositorioLeilao.novos()).thenReturn(leiloesAntigos);
 
 		encerrador.encerra();
 
 		assertThat(leilao1.isEncerrado(), is(true));
 		assertThat(leilao2.isEncerrado(), is(true));
-		assertThat(encerrador.getTotalEncerrados(), equalTo(2));
+		assertThat(encerrador.totalEncerrados(), equalTo(2));
 	}
 	
 	@Test
@@ -69,13 +70,13 @@ public class EncerradorDeLeilaoTest {
 		Leilao leilao1 = CriadorDeLeilao.para("TV OLED",   ontem, real).create();
 		Leilao leilao2 = CriadorDeLeilao.para("Geladeira", ontem, real).create();
 
-		when(repositorioLeilao.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
+		when(repositorioLeilao.novos()).thenReturn(Arrays.asList(leilao1, leilao2));
 		
 		encerrador.encerra();
 
 		assertThat(leilao1.isEncerrado(), is(false));
 		assertThat(leilao2.isEncerrado(), is(false));
-		assertThat(encerrador.getTotalEncerrados(), equalTo(0));
+		assertThat(encerrador.totalEncerrados(), equalTo(0));
 		
 		verify(repositorioLeilao, never()).atualiza(leilao1);
 		verify(repositorioLeilao, never()).atualiza(leilao2);
@@ -83,11 +84,11 @@ public class EncerradorDeLeilaoTest {
 	
 	@Test
 	public void deveIgnorarLeiloesNaoCriados() {
-		when(repositorioLeilao.correntes()).thenReturn(new ArrayList<>());
+		when(repositorioLeilao.novos()).thenReturn(new ArrayList<>());
 		
 		encerrador.encerra();
 
-		assertThat(encerrador.getTotalEncerrados(), equalTo(0));
+		assertThat(encerrador.totalEncerrados(), equalTo(0));
 	}
 	
 	@Test
@@ -98,7 +99,7 @@ public class EncerradorDeLeilaoTest {
         		.create();
         
         List<Leilao> leiloesAntigos = Arrays.asList(leilao1);
-		when(repositorioLeilao.correntes()).thenReturn(leiloesAntigos);
+		when(repositorioLeilao.novos()).thenReturn(leiloesAntigos);
         
         encerrador.encerra();
 
@@ -114,7 +115,7 @@ public class EncerradorDeLeilaoTest {
         		.create();
 
         List<Leilao> leiloesAntigos = Arrays.asList(leilao1);
-		when(repositorioLeilao.correntes()).thenReturn(leiloesAntigos);
+		when(repositorioLeilao.novos()).thenReturn(leiloesAntigos);
 
         encerrador.encerra();
 
@@ -131,7 +132,7 @@ public class EncerradorDeLeilaoTest {
 		Leilao leilao1 = CriadorDeLeilao.para("TV OLED",   antigo, real).create();
 		Leilao leilao2 = CriadorDeLeilao.para("Geladeira", antigo, real).create();
 		
-		when(repositorioLeilao.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
+		when(repositorioLeilao.novos()).thenReturn(Arrays.asList(leilao1, leilao2));
 		doThrow(new RuntimeException()).when(repositorioLeilao).atualiza(leilao1);	
 
 		encerrador.encerra();
@@ -147,7 +148,7 @@ public class EncerradorDeLeilaoTest {
 		Leilao leilao1 = CriadorDeLeilao.para("TV OLED",   antigo, real).create();
 		Leilao leilao2 = CriadorDeLeilao.para("Geladeira", antigo, real).create();
 		
-		when(repositorioLeilao.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
+		when(repositorioLeilao.novos()).thenReturn(Arrays.asList(leilao1, leilao2));
 		doThrow(new RuntimeException()).when(carteiro).enviar(leilao1);
 
 		encerrador.encerra();
@@ -164,7 +165,7 @@ public class EncerradorDeLeilaoTest {
 		Leilao leilao1 = CriadorDeLeilao.para("TV OLED",   antigo, real).create();
 		Leilao leilao2 = CriadorDeLeilao.para("Geladeira", antigo, real).create();
 		
-		when(repositorioLeilao.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
+		when(repositorioLeilao.novos()).thenReturn(Arrays.asList(leilao1, leilao2));
 		doThrow(new RuntimeException()).when(repositorioLeilao).atualiza(any(Leilao.class));
 
 		encerrador.encerra();

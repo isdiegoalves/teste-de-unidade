@@ -23,19 +23,20 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
 import br.diego.leilaoonline.avaliador.model.Avaliador;
-import br.diego.leilaoonline.infra.relogio.service.Relogio;
+import br.diego.leilaoonline.infra.relogio.Relogio;
 import br.diego.leilaoonline.leilao.builder.CriadorDeLeilao;
 import br.diego.leilaoonline.leilao.model.Leilao;
-import br.diego.leilaoonline.leilao.repository.LeilaoRepositorio;
-import br.diego.leilaoonline.pagamento.entity.Pagamento;
-import br.diego.leilaoonline.pagamento.service.GeradorDePagamento;
-import br.diego.leilaoonline.pagamento.service.PagamentoRepositorio;
+import br.diego.leilaoonline.leilao.repository.LeilaoRepository;
+import br.diego.leilaoonline.pagamento.model.Pagamento;
+import br.diego.leilaoonline.pagamento.repository.PagamentoRepository;
+import br.diego.leilaoonline.pagamento.service.GeradorPagamentoService;
+import br.diego.leilaoonline.pagamento.service.GeradorPagamentoServiceImpl;
 import br.diego.leilaoonline.usuario.model.Usuario;
 
-public class GeradorDePagamentoTest {
+public class GeradorPagamentoServiceTest {
 	
-	private LeilaoRepositorio leiloes;
-	private PagamentoRepositorio pagamentos;
+	private LeilaoRepository leiloes;
+	private PagamentoRepository pagamentos;
 	private CurrencyUnit real;
 	private Usuario maria;
 	private Usuario jose;
@@ -48,8 +49,8 @@ public class GeradorDePagamentoTest {
 		maria = usuario("Maria Pereira");
 		jose = usuario("José da Silva");
 		real = Monetary.getCurrency("BRL");
-		leiloes 	= mock(LeilaoRepositorio.class);
-		pagamentos 	= mock(PagamentoRepositorio.class);
+		leiloes 	= mock(LeilaoRepository.class);
+		pagamentos 	= mock(PagamentoRepository.class);
 		relogio = mock(Relogio.class);
 	}
 
@@ -63,7 +64,7 @@ public class GeradorDePagamentoTest {
 
         when(leiloes.encerrados()).thenReturn(Arrays.asList(leilao));
 
-		GeradorDePagamento gerador = new GeradorDePagamento(leiloes, pagamentos, avaliador);
+		GeradorPagamentoService gerador = new GeradorPagamentoServiceImpl(leiloes, pagamentos, avaliador);
         gerador.gerar();
 
         ArgumentCaptor<Pagamento> argumento = ArgumentCaptor.forClass(Pagamento.class);
@@ -87,7 +88,7 @@ public class GeradorDePagamentoTest {
     	// ensinamos o mock a dizer que "hoje" é sabado!
     	when(relogio.hoje()).thenReturn(sabado_23_JAN);
 
-    	GeradorDePagamento gerador = new GeradorDePagamento(leiloes, pagamentos, avaliador,  relogio);
+    	GeradorPagamentoService gerador = new GeradorPagamentoServiceImpl(leiloes, pagamentos, avaliador,  relogio);
     	gerador.gerar();
 
     	ArgumentCaptor<Pagamento> argumento = ArgumentCaptor.forClass(Pagamento.class);

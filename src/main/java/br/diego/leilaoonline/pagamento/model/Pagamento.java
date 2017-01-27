@@ -1,4 +1,4 @@
-package br.diego.leilaoonline.pagamento.entity;
+package br.diego.leilaoonline.pagamento.model;
 
 import java.time.LocalDate;
 

@@ -1,4 +1,4 @@
-package br.diego.leilaoonline.infra.relogio.service;
+package br.diego.leilaoonline.infra.relogio;
 
 import java.time.LocalDate;
 

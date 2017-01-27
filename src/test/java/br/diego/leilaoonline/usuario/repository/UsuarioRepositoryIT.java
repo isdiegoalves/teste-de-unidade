@@ -18,13 +18,13 @@ import br.diego.leilaoonline.usuario.model.Usuario;
 public class UsuarioRepositoryIT {
 	
 	private Session session;
-	private UsuarioDao usuarioDao;
+	private UsuarioRepository usuarioDao;
 	
 	@Before
 	public void before() {
 		session = new CriadorDeSessao().session();
 		session.beginTransaction();
-		usuarioDao = new UsuarioDao(session);
+		usuarioDao = new UsuarioRepositoryImpl(session);
 		
 	}
 	

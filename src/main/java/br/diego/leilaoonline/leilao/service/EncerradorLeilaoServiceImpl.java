@@ -7,21 +7,22 @@ import java.time.LocalDate;
 
 import br.diego.leilaoonline.infra.email.Carteiro;
 import br.diego.leilaoonline.leilao.model.Leilao;
-import br.diego.leilaoonline.leilao.repository.LeilaoRepositorio;
+import br.diego.leilaoonline.leilao.repository.LeilaoRepository;
 
-public class EncerradorDeLeilao {
+public class EncerradorLeilaoServiceImpl implements EncerradorLeilaoService {
 
 	private int total = 0;
-	private final LeilaoRepositorio repositorio;
+	private final LeilaoRepository repositorio;
 	private final Carteiro carteiro;
 
-	public EncerradorDeLeilao(LeilaoRepositorio repositorio, Carteiro carteiro) {
+	public EncerradorLeilaoServiceImpl(LeilaoRepository repositorio, Carteiro carteiro) {
 		this.repositorio = repositorio;
 		this.carteiro = carteiro;
 	}
 
+	@Override
 	public void encerra() {
-		repositorio.correntes().stream()
+		repositorio.novos().stream()
 		.filter(leilao -> comecouSemanaPassada(leilao))
 		.forEach(leilao -> {
 			try {
@@ -43,7 +44,8 @@ public class EncerradorDeLeilao {
 		return DAYS.between(inicio, fim);
 	}
 
-	public int getTotalEncerrados() {
+	@Override
+	public int totalEncerrados() {
 		return total;
 	}
 }

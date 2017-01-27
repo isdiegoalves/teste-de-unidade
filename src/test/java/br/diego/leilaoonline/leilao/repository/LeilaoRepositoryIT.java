@@ -25,15 +25,16 @@ import org.junit.Test;
 import br.diego.leilaoonline.infra.persistence.hibernate.CriadorDeSessao;
 import br.diego.leilaoonline.leilao.model.Leilao;
 import br.diego.leilaoonline.usuario.model.Usuario;
-import br.diego.leilaoonline.usuario.repository.UsuarioDao;
+import br.diego.leilaoonline.usuario.repository.UsuarioRepository;
+import br.diego.leilaoonline.usuario.repository.UsuarioRepositoryImpl;
 
 public class LeilaoRepositoryIT {
 
 	private Session session;
-	private LeilaoRepositoryImpl leilaoDao;
+	private LeilaoRepository leilaoRepository;
 	private CurrencyUnit dollar;
 	private CurrencyUnit real;
-	private UsuarioDao usuarioDao;
+	private UsuarioRepository usuarioRepository;
 	
 	@Before
 	public void before() {
@@ -41,8 +42,8 @@ public class LeilaoRepositoryIT {
 		dollar = Monetary.getCurrency("USD");
 		session = new CriadorDeSessao().session();
 		session.beginTransaction();
-		leilaoDao = new LeilaoRepositoryImpl(session);
-		usuarioDao = new UsuarioDao(session);
+		leilaoRepository = new LeilaoRepositoryImpl(session);
+		usuarioRepository = new UsuarioRepositoryImpl(session);
 	}
 	
 	@After
@@ -81,11 +82,11 @@ public class LeilaoRepositoryIT {
 				.dono(Usuario.fromId(1L))
 				.create();
 		
-		leilaoDao.salvar(leilaoAntigo);
-		leilaoDao.salvar(leilaoMuitoAntigo);
-		leilaoDao.salvar(leilaoNovo);
+		leilaoRepository.salvar(leilaoAntigo);
+		leilaoRepository.salvar(leilaoMuitoAntigo);
+		leilaoRepository.salvar(leilaoNovo);
 		
-		List<Leilao> novos = leilaoDao.novos();
+		List<Leilao> novos = leilaoRepository.novos();
 		
 		assertThat(novos, hasSize(2));
 		assertThat(novos.get(0).getDescricao(), equalTo("Geladeira"));
@@ -95,7 +96,7 @@ public class LeilaoRepositoryIT {
 	@Test
 	public void naoDeveEncontrarLeiloesNovos() {
 		
-		List<Leilao> novos = leilaoDao.novos();
+		List<Leilao> novos = leilaoRepository.novos();
 		
 		assertThat(novos, empty());
 	}
@@ -119,10 +120,10 @@ public class LeilaoRepositoryIT {
 				.dono(Usuario.fromId(1L))
 				.create();
 		
-		leilaoDao.salvar(leilao);
-		leilaoDao.salvar(leilaoAIgnorar);
+		leilaoRepository.salvar(leilao);
+		leilaoRepository.salvar(leilaoAIgnorar);
 		
-		Long total = leilaoDao.total();
+		Long total = leilaoRepository.total();
 		
 		assertThat(total, equalTo(1L));
 	}
@@ -138,9 +139,9 @@ public class LeilaoRepositoryIT {
 		.dono(Usuario.fromId(1L))
 		.create();
 		
-		leilaoDao.salvar(leilao);
+		leilaoRepository.salvar(leilao);
 		
-		Long total = leilaoDao.total();
+		Long total = leilaoRepository.total();
 		
 		assertThat(total, equalTo(0L));
 	}
@@ -168,10 +169,10 @@ public class LeilaoRepositoryIT {
 				.dono(Usuario.fromId(1L))
 				.create();
 		
-		leilaoDao.salvar(primeiroLeilaoAbertoA7Dias);
-		leilaoDao.salvar(segundoLeilaoAbertoA7Dias);
+		leilaoRepository.salvar(primeiroLeilaoAbertoA7Dias);
+		leilaoRepository.salvar(segundoLeilaoAbertoA7Dias);
 		
-		List<Leilao> novos = leilaoDao.porPeriodo(seteDiasAtras, seteDiasAtras);
+		List<Leilao> novos = leilaoRepository.porPeriodo(seteDiasAtras, seteDiasAtras);
 		
 		assertThat(novos, hasSize(2));
 		assertThat(novos.get(0).getDescricao(), equalTo("Geladeira"));
@@ -201,10 +202,10 @@ public class LeilaoRepositoryIT {
 				.dono(Usuario.fromId(1L))
 				.create();
 		
-		leilaoDao.salvar(leilaoAbertoA6Dias);
-		leilaoDao.salvar(leilaoAbertoA7Dias);
+		leilaoRepository.salvar(leilaoAbertoA6Dias);
+		leilaoRepository.salvar(leilaoAbertoA7Dias);
 		
-		List<Leilao> novos = leilaoDao.porPeriodo(seteDiasAtras, seteDiasAtras);
+		List<Leilao> novos = leilaoRepository.porPeriodo(seteDiasAtras, seteDiasAtras);
 		
 		assertThat(novos, hasSize(0));
 	}
@@ -232,10 +233,10 @@ public class LeilaoRepositoryIT {
 				.dono(Usuario.fromId(1L))
 				.create();
 		
-		leilaoDao.salvar(leilaoAberto);
-		leilaoDao.salvar(leilaoAbertoA7Dias);
+		leilaoRepository.salvar(leilaoAberto);
+		leilaoRepository.salvar(leilaoAbertoA7Dias);
 		
-		List<Leilao> novos = leilaoDao.porPeriodo(seteDiasAtras, seteDiasAtras);
+		List<Leilao> novos = leilaoRepository.porPeriodo(seteDiasAtras, seteDiasAtras);
 		assertThat(novos, hasSize(0));
 	}
 	
@@ -269,11 +270,11 @@ public class LeilaoRepositoryIT {
 				.dono(Usuario.fromId(1L))
 				.create();
 		
-		leilaoDao.salvar(leilaoAbertoA6Dias);
-		leilaoDao.salvar(leilaoAbertoA7Dias);
-		leilaoDao.salvar(leilaoAbertoA8Dias);
+		leilaoRepository.salvar(leilaoAbertoA6Dias);
+		leilaoRepository.salvar(leilaoAbertoA7Dias);
+		leilaoRepository.salvar(leilaoAbertoA8Dias);
 		
-		List<Leilao> novos = leilaoDao.antigos();
+		List<Leilao> novos = leilaoRepository.antigos();
 		
 		assertThat(novos, hasSize(1));
 		assertThat(novos.get(0).getDescricao(), equalTo("Televisão"));
@@ -282,8 +283,8 @@ public class LeilaoRepositoryIT {
 	@Test
 	public void deveTrazerLeiloesDisputadosEntreComMaisDeTresLances() {
 		
-		Usuario diego = usuarioDao.porId(1L);
-		Usuario isabela = usuarioDao.porId(2L);
+		Usuario diego = usuarioRepository.porId(1L);
+		Usuario isabela = usuarioRepository.porId(2L);
 		
 		Leilao leilao1= Leilao.builder()
 		.descricao("Geladeira")
@@ -312,10 +313,10 @@ public class LeilaoRepositoryIT {
 		
 		leilao2.propor(lance(diego,  	Money.of(1000, real), leilao2));
 		leilao2.propor(lance(isabela,	Money.of(1100, real), leilao2));
-		leilaoDao.salvar(leilao1);
-		leilaoDao.salvar(leilao2);
+		leilaoRepository.salvar(leilao1);
+		leilaoRepository.salvar(leilao2);
 		
-		List<Leilao> novos = leilaoDao.disputadosEntre(Money.zero(real), Money.of(3000, real));
+		List<Leilao> novos = leilaoRepository.disputadosEntre(Money.zero(real), Money.of(3000, real));
 		
 		assertThat(novos, hasSize(2));
 		assertThat(novos.get(0).getDescricao(), equalTo("Geladeira"));
@@ -324,8 +325,8 @@ public class LeilaoRepositoryIT {
 	@Test
 	public void deveTrazerLeiloesDoUsuario() {
 		
-		Usuario diego = usuarioDao.porId(1L);
-		Usuario isabela = usuarioDao.porId(2L);
+		Usuario diego = usuarioRepository.porId(1L);
+		Usuario isabela = usuarioRepository.porId(2L);
 		
 		Leilao leilao1= Leilao.builder()
 		.descricao("Geladeira")
@@ -356,10 +357,10 @@ public class LeilaoRepositoryIT {
 		leilao2.propor(lance(isabela,	Money.of(1100, real), leilao2));
 		
 		
-		leilaoDao.salvar(leilao1);
-		leilaoDao.salvar(leilao2);
+		leilaoRepository.salvar(leilao1);
+		leilaoRepository.salvar(leilao2);
 		
-		List<Leilao> novos = leilaoDao.listaLeiloesDoUsuario(diego);
+		List<Leilao> novos = leilaoRepository.listaLeiloesDoUsuario(diego);
 		
 		assertThat(novos, hasSize(2));
 		assertThat(novos.get(0).getDescricao(), equalTo("Geladeira"));
@@ -369,8 +370,8 @@ public class LeilaoRepositoryIT {
 	@Test
 	public void deveTrazerMediaLanceInicialLeiloes() {
 		
-		Usuario diego = usuarioDao.porId(1L);
-		Usuario isabela = usuarioDao.porId(2L);
+		Usuario diego = usuarioRepository.porId(1L);
+		Usuario isabela = usuarioRepository.porId(2L);
 		
 		Leilao leilaoTV = Leilao.builder()
 				.descricao("Televisão")
@@ -415,11 +416,11 @@ public class LeilaoRepositoryIT {
 		leilaoPlaystation.propor(lance(diego,  	Money.of(1000, real), leilaoPlaystation));
 		leilaoPlaystation.propor(lance(isabela,	Money.of(1100, real), leilaoPlaystation));
 		
-		leilaoDao.salvar(leilaoTV);
-		leilaoDao.salvar(leilaoGeladeira);
-		leilaoDao.salvar(leilaoPlaystation);
+		leilaoRepository.salvar(leilaoTV);
+		leilaoRepository.salvar(leilaoGeladeira);
+		leilaoRepository.salvar(leilaoPlaystation);
 		
-		MonetaryAmount media = leilaoDao.getValorInicialMedioDoUsuario(diego, real);
+		MonetaryAmount media = leilaoRepository.getValorInicialMedioDoUsuario(diego, real);
 		
 		assertThat(media, equalTo(RoundedMoney.of(350, real, rounding())));
 	}
@@ -428,7 +429,7 @@ public class LeilaoRepositoryIT {
 	@Test
 	public void deveDeletarUmLeilao() {
 		
-		Usuario diego = usuarioDao.porId(1L);
+		Usuario diego = usuarioRepository.porId(1L);
 		
 		Leilao leilaoPlaystation = Leilao.builder()
 				.descricao("Playstation")
@@ -440,9 +441,9 @@ public class LeilaoRepositoryIT {
 				.dono(diego)
 				.create();
 		
-		leilaoDao.salvar(leilaoPlaystation);
-		leilaoDao.deleta(leilaoPlaystation);
-		Leilao leilao = leilaoDao.porId(leilaoPlaystation.getId());
+		leilaoRepository.salvar(leilaoPlaystation);
+		leilaoRepository.deleta(leilaoPlaystation);
+		Leilao leilao = leilaoRepository.porId(leilaoPlaystation.getId());
 		
 		assertThat(leilao, nullValue());
 	}
