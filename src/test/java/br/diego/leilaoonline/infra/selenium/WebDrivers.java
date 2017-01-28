@@ -1,5 +1,6 @@
 package br.diego.leilaoonline.infra.selenium;
 
+import static java.lang.System.getProperty;
 import static java.lang.System.setProperty;
 
 import java.io.File;
@@ -37,8 +38,7 @@ public class WebDrivers {
 	public static WebDriver firefoxWebDriver() {
 		setProperty("webdriver.gecko.driver", "src/test/resources/selenium/geckodriver.exe");
 		FirefoxProfile profile = new FirefoxProfile();
-		String firefoxPath = System.getProperty("firefox.path", "C:\\Program Files (x86)\\Firefox Developer Edition\\firefox.exe");
-		WebDriver driver = new FirefoxDriver(new FirefoxBinary(new File(firefoxPath)), profile);
+		WebDriver driver = new FirefoxDriver(new FirefoxBinary(new File(getProperty("firefox.path"))), profile);
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		return driver;
 	}

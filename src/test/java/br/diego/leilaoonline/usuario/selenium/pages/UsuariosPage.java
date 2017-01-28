@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver;
 
 public class UsuariosPage {
 
-	WebDriver driver; 
+	private final WebDriver driver; 
 
 	public UsuariosPage(WebDriver driver) {
 		super();
@@ -21,6 +21,11 @@ public class UsuariosPage {
 		driver.findElement(By.linkText("Novo Usuário")).click();
 		return new NovoUsuarioPage(driver);
 	}
+	
+	public AlteraUsuarioPage altera(int posicao) {
+		driver.findElements(By.linkText("editar")).get(posicao-1).click();
+		return new AlteraUsuarioPage(driver);
+	}
 
 	public boolean existeNaListagem(String nome, String email) {
 		return driver.getPageSource().contains(nome) &&
@@ -33,4 +38,5 @@ public class UsuariosPage {
 		Alert alert = driver.switchTo().alert();
 		// confirma
 		alert.accept();
-	}}
+	}
+}

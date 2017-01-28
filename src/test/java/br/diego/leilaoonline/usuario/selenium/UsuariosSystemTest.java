@@ -22,6 +22,7 @@ public class UsuariosSystemTest {
 	@Before
 	public void before() {
 		driver = chromeWebDriver();
+		driver.get("http://localhost:8080/apenas-teste/limpa");
 		usuarios = new UsuariosPage(driver);
 	}
 
@@ -95,4 +96,13 @@ public class UsuariosSystemTest {
 
         assertThat(usuarios.existeNaListagem("Ronaldo Luiz de Albuquerque", "ronaldo2009@terra.com.br"), is(false));
     }
+	
+	@Test
+	public void deveEditarUsuarioPrimeiraPosicao() {
+		usuarios.visita();
+		usuarios.novo().cadastra("Diego Alves", "diego@alves.com");;
+		usuarios.altera(1).para("Hulk", "hulk@com");
+
+		assertThat(usuarios.existeNaListagem ("Hulk", "hulk@com"), is(true));
+	}
 }
