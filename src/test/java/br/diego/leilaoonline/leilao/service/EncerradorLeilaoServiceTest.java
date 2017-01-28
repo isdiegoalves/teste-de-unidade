@@ -28,8 +28,6 @@ import br.diego.leilaoonline.infra.email.Carteiro;
 import br.diego.leilaoonline.leilao.builder.CriadorDeLeilao;
 import br.diego.leilaoonline.leilao.model.Leilao;
 import br.diego.leilaoonline.leilao.repository.LeilaoRepository;
-import br.diego.leilaoonline.leilao.service.EncerradorLeilaoService;
-import br.diego.leilaoonline.leilao.service.EncerradorLeilaoServiceImpl;
 
 public class EncerradorLeilaoServiceTest {
 

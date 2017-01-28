@@ -1,5 +1,7 @@
 package br.diego.leilaoonline.usuario.selenium.pages;
 
+import static br.diego.leilaoonline.infra.App.urlBase;
+
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -14,7 +16,7 @@ public class UsuariosPage {
 	}
 
 	public void visita() {
-		driver.get("http://localhost:8080/usuarios");
+		driver.get(urlBase()+"/usuarios");
 	}
 
 	public NovoUsuarioPage novo() {

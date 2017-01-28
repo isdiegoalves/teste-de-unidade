@@ -1,5 +1,6 @@
 package br.diego.leilaoonline.usuario.selenium;
 
+import static br.diego.leilaoonline.infra.App.urlBase;
 import static br.diego.leilaoonline.infra.selenium.WebDrivers.chromeWebDriver;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -22,7 +23,7 @@ public class UsuariosSystemTest {
 	@Before
 	public void before() {
 		driver = chromeWebDriver();
-		driver.get("http://localhost:8080/apenas-teste/limpa");
+		driver.get(urlBase()+"/apenas-teste/limpa");
 		usuarios = new UsuariosPage(driver);
 	}
 

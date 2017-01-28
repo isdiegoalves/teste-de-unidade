@@ -33,4 +33,5 @@ public class NovoLeilaoPage {
 		
 		return driver;
 	}
+
 }

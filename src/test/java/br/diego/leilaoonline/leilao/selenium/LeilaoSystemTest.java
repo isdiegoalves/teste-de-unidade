@@ -8,10 +8,9 @@ import static org.hamcrest.Matchers.is;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import br.diego.leilaoonline.infra.selenium.CriadorDeCenarios;
 import br.diego.leilaoonline.leilao.selenium.pages.LeiloesPage;
 
 public class LeilaoSystemTest {
@@ -22,8 +21,11 @@ public class LeilaoSystemTest {
 	@Before
 	public void before() {
 		driver = chromeWebDriver();
-		driver.get("http://localhost:8080/apenas-teste/limpa");
+
 		leiloes = new LeiloesPage(driver);
+
+		CriadorDeCenarios.novoCenario(driver)
+		.umUsuario("Diego", "diego@alves.com");
 	}
 
 	@After
@@ -49,7 +51,7 @@ public class LeilaoSystemTest {
 		assertThat(driver.getPageSource(), containsString("Nome obrigatorio!"));
 		assertThat(driver.getPageSource(), containsString("Salvar!"));
 	}
-	
+  	
 	@Test
 	public void naoDeveCadastrarLeilaoSemValorInicial() {
 		leiloes.visita();
@@ -59,29 +61,4 @@ public class LeilaoSystemTest {
 		assertThat(driver.getPageSource(), containsString("Salvar!"));
 	}
 
-	public void naoDeveCadastrarUsuarioSemEmailESemEmail() {
-		leiloes.visita();
-		leiloes.novo().cadastra("Playstation", 1000, "Diego", true);
-
-		assertThat(driver.getPageSource(), containsString("Nome obrigatorio!"));
-		assertThat(driver.getPageSource(), containsString("E-mail obrigatorio!"));
-		assertThat(driver.getPageSource(), containsString("Salvar!"));
-
-	}
-
-	public void deveCadastrarEExcluirUsuario() {
-
-		leiloes.visita();
-		leiloes.novo().cadastra("Playstation", 1000, "Diego", true);
-
-		assertThat(leiloes.existeNaListagem("Playstation", 1000, true), is(true));
-
-		int posicao = 1; // queremos o 1o botao da pagina
-		driver.findElements(By.tagName("button")).get(posicao-1).click();
-		// pega o alert que está aberto
-		Alert alert = driver.switchTo().alert();
-		// confirma
-		alert.accept();
-	}
-	
 }
